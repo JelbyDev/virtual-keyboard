@@ -1,0 +1,86 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.keyboard {
+  background-color: #ffecef;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 20px;
+  gap: 10px 0;
+  width: 932px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.keyboard__row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 0 10px;
+}
+
+.keyboard .key {
+  background-color: #efabb6;
+  color: #300505;
+  -webkit-box-shadow: 1px 1px 3px #522828;
+          box-shadow: 1px 1px 3px #522828;
+  width: 50px;
+  height: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 18px;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.keyboard .key:hover, .keyboard .key--active {
+  background-color: #a5727a;
+  color: #fff;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.keyboard .key--flex {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.keyboard .key--ruShift {
+  display: none;
+}
+
+.keyboard .key--enDefault {
+  display: none;
+}
+
+.keyboard .key--enShift {
+  display: none;
+}
+
+.keyboard .key--space {
+  width: 350px;
+}
+/*# sourceMappingURL=main.css.map */

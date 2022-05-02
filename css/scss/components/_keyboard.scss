@@ -1,0 +1,52 @@
+.keyboard {
+  background-color: $keyboard-fon;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 10px 0;
+  width: 932px;
+  margin: 0 auto;
+  border-radius: 10px;
+
+  &__row {
+    display: flex;
+    gap: 0 10px;
+  }
+
+  .key {
+    background-color: $key-fon;
+    color: $key-color;
+    box-shadow: $key-shadow;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.5s;
+    border-radius: 7px;
+    cursor: pointer;
+
+    &:hover,
+    &--active {
+      background-color: $key-hover-fon;
+      color: $key-hover-color;
+      box-shadow: none;
+    }
+    &--flex {
+      flex: 1;
+    }
+    &--ruShift {
+      display: none;
+    }
+    &--enDefault {
+      display: none;
+    }
+    &--enShift {
+      display: none;
+    }
+    &--space {
+      width: 350px;
+    }
+  }
+}
