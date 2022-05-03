@@ -127,9 +127,61 @@ class Keyboard extends General {
 
     event.preventDefault();
 
-    if (event.type === "mousedown" || event.type === "keydown") {
-      currentKeyBlock.classList.add("key--active");
+    if (
+      keyCode === "ShiftLeft" ||
+      keyCode === "ShiftRight" ||
+      keyCode === "CapsLock" ||
+      keyCode === "AltLeft" ||
+      keyCode === "AltRight" ||
+      keyCode === "ControlLeft" ||
+      keyCode === "ControlRight"
+    ) {
+      this.handlerSystemKey(event, keyCode);
+    } else if (event.type === "keydown" || event.type === "mousedown") {
+      let textareaBlock = document.querySelector("textarea");
+      let textareaValue = textareaBlock.value;
+      if (keyCode === "Space") {
+        textareaValue += " ";
+      } else if (keyCode === "Enter") {
+        textareaValue += "\n";
+      } else if (keyCode === "Tab") {
+        textareaValue += "    ";
+      } else if (keyCode === "Backspace") {
+        let cursorStart = textareaBlock.selectionStart;
+        let cursorEnd = textareaBlock.selectionEnd;
+        let deleteStart = "";
+        let deleteEnd = "";
+        let cursorPositionAfterDelete = "";
+        if (cursorStart === cursorEnd) {
+          if (cursorStart !== 0) {
+            deleteStart = cursorStart - 1;
+            deleteEnd = 1;
+            cursorPositionAfterDelete = cursorStart - 1;
+          }
+        } else {
+          deleteStart = cursorStart;
+          deleteEnd = cursorEnd;
+          cursorPositionAfterDelete = cursorStart;
+        }
+        if (deleteEnd) {
+          textareaValue = textareaValue.split("");
+          textareaValue.splice(deleteStart, deleteEnd);
+          textareaValue = textareaValue.join("");
+          setTimeout(function () {
+            textareaBlock.selectionStart = textareaBlock.selectionEnd =
+              cursorPositionAfterDelete;
+          }, 0);
+        }
+      } else if (keyCode === "Delete") {
+      } else {
+        textareaValue += currentKeyBlock.innerHTML;
+      }
+      textareaBlock.value = textareaValue;
+    }
+  }
 
+  handlerSystemKey(event, keyCode) {
+    if (event.type === "mousedown" || event.type === "keydown") {
       if (keyCode === "ShiftLeft" || keyCode === "ShiftRight") {
         this.shiftMode = true;
         this.keysClass.setShiftMode(true);
@@ -140,20 +192,29 @@ class Keyboard extends General {
       if (keyCode === "CapsLock") {
         if (this.setCapsMode) {
           this.setCapsMode = false;
-          currentKeyBlock.classList.remove("key--caps-active");
+          event.currentTarget.classList.remove("key--caps-active");
         } else {
           this.setCapsMode = true;
-          currentKeyBlock.classList.add("key--caps-active");
+          event.currentTarget.classList.add("key--caps-active");
         }
         this.keysClass.setCapsMode(this.setCapsMode);
         document.querySelectorAll(".key--latter").forEach((keyBlock) => {
           this.keysClass.updateKeyText(keyBlock);
         });
       }
+      if (
+        ((keyCode === "AltLeft" || keyCode === "AltRight") && event.ctrlKey) ||
+        ((keyCode === "ControlLeft" || keyCode === "ControlRight") &&
+          event.altKey)
+      ) {
+        this.language = this.language === "ru" ? "en" : "ru";
+        this.keysClass.setLanguage(this.language);
+        document.querySelectorAll(".key--latter").forEach((keyBlock) => {
+          this.keysClass.updateKeyText(keyBlock);
+        });
+      }
     }
     if (event.type === "mouseup" || event.type === "keyup") {
-      currentKeyBlock.classList.remove("key--active");
-
       if (keyCode === "ShiftLeft" || keyCode === "ShiftRight") {
         this.shiftMode = false;
         this.keysClass.setShiftMode(false);
