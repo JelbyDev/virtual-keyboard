@@ -55,7 +55,7 @@ html {
   cursor: pointer;
 }
 
-.keyboard .key:hover {
+.keyboard .key:hover, .keyboard .key--active {
   background-color: #a5727a;
   color: #fff;
   -webkit-box-shadow: none;

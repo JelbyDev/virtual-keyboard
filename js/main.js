@@ -85,6 +85,30 @@ class Keyboard extends General {
     this.createTextareaBlock();
     this.createKeyboardBlock();
     this.createInfoBlock();
+
+    this.createHandlerOnMouse();
+    this.createHandlerOnKey();
+  }
+
+  //------HANDLER METHODS-----------------------//
+  createHandlerOnMouse() {
+    document.querySelectorAll(".key").forEach((element) => {
+      element.addEventListener("mousedown", (event) =>
+        this.clickKeyboardKey(event)
+      );
+      element.addEventListener("mouseup", (event) =>
+        this.clickKeyboardKey(event)
+      );
+    });
+  }
+
+  createHandlerOnKey() {
+    document.body.addEventListener("keydown", (event) =>
+      this.clickKeyboardKey(event)
+    );
+    document.body.addEventListener("keyup", (event) =>
+      this.clickKeyboardKey(event)
+    );
   }
 
   clickKeyboardKey(event) {
@@ -92,6 +116,18 @@ class Keyboard extends General {
       event.currentTarget.classList.add("key--active");
     if (event.type === "mouseup")
       event.currentTarget.classList.remove("key--active");
+
+    if (event.type === "keydown") {
+      document
+        .querySelector(`[data-key-code='${event.code}']`)
+        .classList.add("key--active");
+    }
+
+    if (event.type === "keyup") {
+      document
+        .querySelector(`[data-key-code='${event.code}']`)
+        .classList.remove("key--active");
+    }
   }
 
   //------CREATE METHODS-----------------------//

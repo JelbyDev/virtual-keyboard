@@ -27,7 +27,8 @@
     border-radius: 7px;
     cursor: pointer;
 
-    &:hover {
+    &:hover,
+    &--active {
       background-color: $key-hover-fon;
       color: $key-hover-color;
       box-shadow: none;

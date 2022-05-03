@@ -66,7 +66,7 @@ export const KEYBOARD_KEYS = {
   AltRight: getSystemKey("Alt", ["key--alt", "key--flex"]),
   ArrowLeft: getLetterKey("◄", "◄", "◄", "◄"),
   ArrowDown: getLetterKey("▼", "▼", "▼", "▼"),
-  ArrowLRight: getLetterKey("►", "►", "►", "►"),
+  ArrowRight: getLetterKey("►", "►", "►", "►"),
   ControlRight: getSystemKey("Ctrl", ["key--ctrl"]),
 };
 
@@ -147,7 +147,7 @@ export const KEYBOARD_LAYOUT = [
     "AltRight",
     "ArrowLeft",
     "ArrowDown",
-    "ArrowLRight",
+    "ArrowRight",
     "ControlRight",
   ],
 ];
