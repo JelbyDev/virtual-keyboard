@@ -94,49 +94,50 @@ class Keyboard extends General {
   //------HANDLER METHODS-----------------------//
   createHandlerOnMouse() {
     document.querySelectorAll(".key").forEach((element) => {
-      element.addEventListener("mousedown", (event) =>
-        this.clickKeyboardKey(event)
-      );
+      element.addEventListener("mousedown", (event) => {
+        this.clickKeyboardKey(event, event.currentTarget.dataset.keyCode);
+      });
       element.addEventListener("mouseup", (event) =>
-        this.clickKeyboardKey(event)
+        this.clickKeyboardKey(event, event.currentTarget.dataset.keyCode)
       );
     });
   }
 
   createHandlerOnKey() {
     document.body.addEventListener("keydown", (event) =>
-      this.clickKeyboardKey(event)
+      this.clickKeyboardKey(event, event.code)
     );
     document.body.addEventListener("keyup", (event) =>
-      this.clickKeyboardKey(event)
+      this.clickKeyboardKey(event, event.code)
     );
   }
 
-  clickKeyboardKey(event) {
-    if (event.type === "mousedown")
-      event.currentTarget.classList.add("key--active");
-    if (event.type === "mouseup")
-      event.currentTarget.classList.remove("key--active");
+  clickKeyboardKey(event, keyCode) {
+    let keyData = this.keysClass.getKeyData(keyCode);
+    if (!keyData) return false;
 
-    let currentKeyBlock = "";
-    if (event.type === "keydown" || event.type === "keyup") {
-      event.preventDefault();
-      currentKeyBlock = document.querySelector(
-        `[data-key-code='${event.code}']`
-      );
-    }
+    let currentKeyBlock = document.querySelector(
+      `[data-key-code='${keyCode}']`
+    );
 
-    if (event.type === "keydown") {
+    if (event.type === "mousedown" || event.type === "keydown")
+      currentKeyBlock.classList.add("key--active");
+    if (event.type === "mouseup" || event.type === "keyup")
+      currentKeyBlock.classList.remove("key--active");
+
+    event.preventDefault();
+
+    if (event.type === "mousedown" || event.type === "keydown") {
       currentKeyBlock.classList.add("key--active");
 
-      if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+      if (keyCode === "ShiftLeft" || keyCode === "ShiftRight") {
         this.shiftMode = true;
         this.keysClass.setShiftMode(true);
         document.querySelectorAll(".key--latter").forEach((keyBlock) => {
           this.keysClass.updateKeyText(keyBlock);
         });
       }
-      if (event.code === "CapsLock") {
+      if (keyCode === "CapsLock") {
         if (this.setCapsMode) {
           this.setCapsMode = false;
           currentKeyBlock.classList.remove("key--caps-active");
@@ -150,10 +151,10 @@ class Keyboard extends General {
         });
       }
     }
-    if (event.type === "keyup") {
+    if (event.type === "mouseup" || event.type === "keyup") {
       currentKeyBlock.classList.remove("key--active");
 
-      if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+      if (keyCode === "ShiftLeft" || keyCode === "ShiftRight") {
         this.shiftMode = false;
         this.keysClass.setShiftMode(false);
         document.querySelectorAll(".key--latter").forEach((keyBlock) => {
