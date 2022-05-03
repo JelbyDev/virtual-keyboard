@@ -23,15 +23,17 @@
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    transition: all 0.5s;
+    transition: all 0.2s;
     border-radius: 7px;
     cursor: pointer;
 
-    &:hover,
-    &--active {
+    &:hover {
       background-color: $key-hover-fon;
       color: $key-hover-color;
       box-shadow: none;
+    }
+    &--active {
+      border-radius: 14px;
     }
     &--flex {
       flex: 1;

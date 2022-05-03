@@ -1,59 +1,142 @@
-import { KEYBOARD_KEYS } from "./keyboardKeys.js";
+import { KEYBOARD_KEYS, KEYBOARD_LAYOUT } from "./keyboardKeys.js";
 
 document.addEventListener("keydown", (event) => {});
 
-class Keyboard {
-  constructor() {
+class General {
+  constructor() {}
+  createDomElement(tagName, innerText = null, classes = null) {
+    let element = document.createElement(tagName);
+    if (innerText) element.innerText = innerText;
+    if (classes) element.classList.add(...classes);
+    return element;
+  }
+}
+
+class Keys extends General {
+  constructor(...params) {
+    super();
+    [this.language, this.shiftMode, this.capsMode] = [...params];
+  }
+
+  changeShiftMode(shiftMode) {
+    this.shiftMode = shiftMode;
+  }
+
+  changeCapsMode() {
+    this.capsMode = capsMode;
+  }
+
+  changeLanguage(language) {
+    this.language = language;
+  }
+
+  getKeyData(keyCode) {
+    return KEYBOARD_KEYS[keyCode];
+  }
+
+  getKeyInHtml(keyCode) {
+    let keyData = this.getKeyData(keyCode);
+    let keyBlockClasses = ["key"];
+    if (keyData.letterKey) keyBlockClasses.push("key--latter");
+    if (keyData.additionalClasses)
+      keyBlockClasses = [...keyBlockClasses, ...keyData.additionalClasses];
+
+    let keyBlock = this.createDomElement("div", "1", keyBlockClasses);
+    keyBlock.dataset.keyCode = keyCode;
+    this.updateKeyText(keyBlock, keyData);
+
+    return keyBlock;
+  }
+
+  updateKeyText(keyBlock, keyData) {
+    if (keyData.systemKey) {
+      keyBlock.innerText = keyData.text;
+      return;
+    }
+
+    let keyText = ";";
+    if (this.shiftMode) {
+      keyText = keyData[this.language].shiftText;
+      if (this.capsMode) keyText = keyText.toLowerCase();
+    } else {
+      keyText = keyData[this.language].text;
+      if (this.capsMode) keyText = keyText.toUpperCase();
+    }
+    keyBlock.innerText = keyText;
+    return;
+  }
+}
+
+class Keyboard extends General {
+  constructor(appWrapper = null) {
+    super();
+    this.shiftMode = false;
+    this.capsMode = false;
+    this.language = "ru";
+    this.keysClass = new Keys(this.language, this.shiftMode, this.capsMode);
+    this.appWrapper = appWrapper
+      ? document.querySelector(appWrapper)
+      : this.createAppWrapper();
     this.initKeyboard();
   }
 
   initKeyboard() {
-    let wrapper = document.createElement("div");
-    wrapper.classList.add("keyboard");
+    this.createTitleBlok();
+    this.createTextareaBlock();
+    this.createKeyboardBlock();
+    this.createInfoBlock();
+  }
 
-    KEYBOARD_KEYS.forEach((rowElement, rowIndex) => {
-      let rowWrapper = document.createElement("div");
-      rowWrapper.classList.add("keyboard__row");
+  clickKeyboardKey(event) {
+    if (event.type === "mousedown")
+      event.currentTarget.classList.add("key--active");
+    if (event.type === "mouseup")
+      event.currentTarget.classList.remove("key--active");
+  }
 
-      rowElement.forEach((element, index) => {
-        rowWrapper.append(this.createHtmlKey(element, index));
-      });
+  //------CREATE METHODS-----------------------//
+  createAppWrapper() {
+    let appWrapper = this.createDomElement("section", "", ["app"]);
+    document.body.prepend(appWrapper);
+    return appWrapper;
+  }
 
-      wrapper.append(rowWrapper);
+  createTitleBlok() {
+    let titleBlock = this.createDomElement("h1", "Виртуальная клавиатура");
+    this.appWrapper.append(titleBlock);
+  }
+
+  createTextareaBlock() {
+    let textareaBlock = this.createDomElement("textarea");
+    this.appWrapper.append(textareaBlock);
+  }
+
+  createKeyboardBlock() {
+    let keyboardBlock = this.createDomElement("div", "", ["keyboard"]);
+    KEYBOARD_LAYOUT.forEach((rowKeys) => {
+      let keyboardRowBlock = this.getKeyboardRowBlock(rowKeys);
+      keyboardBlock.append(keyboardRowBlock);
     });
-
-    document.body.append(wrapper);
+    this.appWrapper.append(keyboardBlock);
   }
 
-  createHtmlKey(keyInfo) {
-    let keyWrapper = document.createElement("div");
-    keyWrapper.classList.add("key", `key--code-${keyInfo.code}`);
-    if (keyInfo.additionalClass)
-      keyWrapper.classList.add(...keyInfo.additionalClass);
-    if ("staticText" in keyInfo) {
-      keyWrapper.innerText = keyInfo.staticText;
-    } else {
-      keyWrapper.append(
-        this.createLanguageTextInKey("ruDefault", keyInfo.ruDefault)
-      );
-      keyWrapper.append(
-        this.createLanguageTextInKey("ruShift", keyInfo.ruShift)
-      );
-      keyWrapper.append(
-        this.createLanguageTextInKey("enDefault", keyInfo.enDefault)
-      );
-      keyWrapper.append(
-        this.createLanguageTextInKey("enShift", keyInfo.enShift)
-      );
-    }
-    return keyWrapper;
+  createInfoBlock() {
+    let systemInfoBlock = this.createDomElement(
+      "p",
+      "Клава сделана под Windows"
+    );
+    let languageInfoBlock = this.createDomElement("p", "Смена языка");
+    this.appWrapper.append(systemInfoBlock);
+    this.appWrapper.append(languageInfoBlock);
   }
 
-  createLanguageTextInKey(language, text) {
-    let languageBlock = document.createElement("div");
-    languageBlock.classList.add(`key--${language}`);
-    languageBlock.innerText = text;
-    return languageBlock;
+  //------GET METHODS-----------------------//
+  getKeyboardRowBlock(rowKeys) {
+    let rowBlock = this.createDomElement("div", "", ["keyboard__row"]);
+    rowKeys.forEach((keyCode) => {
+      rowBlock.append(this.keysClass.getKeyInHtml(keyCode));
+    });
+    return rowBlock;
   }
 }
 

@@ -49,17 +49,21 @@ html {
       -ms-flex-pack: center;
           justify-content: center;
   font-size: 18px;
-  -webkit-transition: all 0.5s;
-  transition: all 0.5s;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
   border-radius: 7px;
   cursor: pointer;
 }
 
-.keyboard .key:hover, .keyboard .key--active {
+.keyboard .key:hover {
   background-color: #a5727a;
   color: #fff;
   -webkit-box-shadow: none;
           box-shadow: none;
+}
+
+.keyboard .key--active {
+  border-radius: 14px;
 }
 
 .keyboard .key--flex {
