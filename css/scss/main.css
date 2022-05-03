@@ -66,22 +66,14 @@ html {
   border-radius: 14px;
 }
 
+.keyboard .key--caps-active {
+  color: green;
+}
+
 .keyboard .key--flex {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
-}
-
-.keyboard .key--ruShift {
-  display: none;
-}
-
-.keyboard .key--enDefault {
-  display: none;
-}
-
-.keyboard .key--enShift {
-  display: none;
 }
 
 .keyboard .key--space {

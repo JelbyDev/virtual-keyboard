@@ -18,15 +18,15 @@ class Keys extends General {
     [this.language, this.shiftMode, this.capsMode] = [...params];
   }
 
-  changeShiftMode(shiftMode) {
+  setShiftMode(shiftMode) {
     this.shiftMode = shiftMode;
   }
 
-  changeCapsMode() {
+  setCapsMode(capsMode) {
     this.capsMode = capsMode;
   }
 
-  changeLanguage(language) {
+  setLanguage(language) {
     this.language = language;
   }
 
@@ -49,6 +49,7 @@ class Keys extends General {
   }
 
   updateKeyText(keyBlock, keyData) {
+    if (!keyData) keyData = this.getKeyData(keyBlock.dataset.keyCode);
     if (keyData.systemKey) {
       keyBlock.innerText = keyData.text;
       return;
@@ -117,16 +118,48 @@ class Keyboard extends General {
     if (event.type === "mouseup")
       event.currentTarget.classList.remove("key--active");
 
-    if (event.type === "keydown") {
-      document
-        .querySelector(`[data-key-code='${event.code}']`)
-        .classList.add("key--active");
+    let currentKeyBlock = "";
+    if (event.type === "keydown" || event.type === "keyup") {
+      event.preventDefault();
+      currentKeyBlock = document.querySelector(
+        `[data-key-code='${event.code}']`
+      );
     }
 
+    if (event.type === "keydown") {
+      currentKeyBlock.classList.add("key--active");
+
+      if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+        this.shiftMode = true;
+        this.keysClass.setShiftMode(true);
+        document.querySelectorAll(".key--latter").forEach((keyBlock) => {
+          this.keysClass.updateKeyText(keyBlock);
+        });
+      }
+      if (event.code === "CapsLock") {
+        if (this.setCapsMode) {
+          this.setCapsMode = false;
+          currentKeyBlock.classList.remove("key--caps-active");
+        } else {
+          this.setCapsMode = true;
+          currentKeyBlock.classList.add("key--caps-active");
+        }
+        this.keysClass.setCapsMode(this.setCapsMode);
+        document.querySelectorAll(".key--latter").forEach((keyBlock) => {
+          this.keysClass.updateKeyText(keyBlock);
+        });
+      }
+    }
     if (event.type === "keyup") {
-      document
-        .querySelector(`[data-key-code='${event.code}']`)
-        .classList.remove("key--active");
+      currentKeyBlock.classList.remove("key--active");
+
+      if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+        this.shiftMode = false;
+        this.keysClass.setShiftMode(false);
+        document.querySelectorAll(".key--latter").forEach((keyBlock) => {
+          this.keysClass.updateKeyText(keyBlock);
+        });
+      }
     }
   }
 

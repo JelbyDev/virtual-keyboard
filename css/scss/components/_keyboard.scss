@@ -36,17 +36,11 @@
     &--active {
       border-radius: 14px;
     }
+    &--caps-active {
+      color: green;
+    }
     &--flex {
       flex: 1;
-    }
-    &--ruShift {
-      display: none;
-    }
-    &--enDefault {
-      display: none;
-    }
-    &--enShift {
-      display: none;
     }
     &--space {
       width: 350px;
