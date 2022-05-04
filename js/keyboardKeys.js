@@ -13,7 +13,7 @@ export const KEYBOARD_KEYS = {
   Digit0: getLetterKey("0", ")", "0", ")"),
   Minus: getLetterKey("-", "_", "-", "_"),
   Equal: getLetterKey("=", "+", "=", "+"),
-  Backspace: getSystemKey("Backspace", ["key--backspace", "key--flex"]),
+  Backspace: getSystemKey("Backspace", ["key--flex"]),
   //ROW 2 -------------------
   Tab: getSystemKey("Tab", ["key--tab", "key--flex"]),
   KeyQ: getLetterKey("й", "Й", "q", "Q"),
@@ -29,7 +29,7 @@ export const KEYBOARD_KEYS = {
   BracketLeft: getLetterKey("х", "{", "[", "{"),
   BracketRight: getLetterKey("ъ", "Ъ", "]", "}"),
   Backslash: getLetterKey("\\", "/", "\\", "|"),
-  Delete: getSystemKey("Del", ["key--del", "key--flex"]),
+  Delete: getSystemKey("Del", ["key--flex"]),
   //ROW 3 -------------------
   CapsLock: getSystemKey("CapsLock", ["key--caps", "key--flex"]),
   KeyA: getLetterKey("ф", "Ф", "a", "A"),
@@ -43,9 +43,9 @@ export const KEYBOARD_KEYS = {
   KeyL: getLetterKey("д", "Д", "l", "L"),
   Semicolon: getLetterKey("ж", "Ж", ";", ":"),
   Quote: getLetterKey("э", "Э", "'", '"'),
-  Enter: getSystemKey("Enter", ["key--enter", "key--flex"]),
+  Enter: getSystemKey("Enter", ["key--flex"]),
   //ROW 4 -------------------
-  ShiftLeft: getSystemKey("Shift", ["key--shift", "key--flex"]),
+  ShiftLeft: getSystemKey("Shift", ["key--flex"]),
   KeyZ: getLetterKey("я", "Я", "z", "Z"),
   KeyX: getLetterKey("ч", "Ч", "x", "X"),
   KeyC: getLetterKey("с", "С", "c", "C"),
@@ -57,17 +57,17 @@ export const KEYBOARD_KEYS = {
   Period: getLetterKey("ю", "Ю", ".", ">"),
   Slash: getLetterKey(".", ",", "/", "?"),
   ArrowUp: getLetterKey("▲", "▲", "▲", "▲"),
-  ShiftRight: getSystemKey("Shift", ["key--shift", "key--flex"]),
+  ShiftRight: getSystemKey("Shift", ["key--flex"]),
   //ROW 5 -------------------
-  ControlLeft: getSystemKey("Ctrl", ["key--ctrl"]),
-  MetaLeft: getSystemKey("Win", ["key--shift", "key--flex"]),
-  AltLeft: getSystemKey("Alt", ["key--alt", "key--flex"]),
+  ControlLeft: getSystemKey("Ctrl", []),
+  MetaLeft: getSystemKey("Win", ["key--flex"]),
+  AltLeft: getSystemKey("Alt", ["key--flex"]),
   Space: getSystemKey("Space", ["key--space"]),
-  AltRight: getSystemKey("Alt", ["key--alt", "key--flex"]),
+  AltRight: getSystemKey("Alt", ["key--flex"]),
   ArrowLeft: getLetterKey("◄", "◄", "◄", "◄"),
   ArrowDown: getLetterKey("▼", "▼", "▼", "▼"),
   ArrowRight: getLetterKey("►", "►", "►", "►"),
-  ControlRight: getSystemKey("Ctrl", ["key--ctrl"]),
+  ControlRight: getSystemKey("Ctrl", []),
 };
 
 export const KEYBOARD_LAYOUT = [

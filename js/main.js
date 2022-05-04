@@ -7,7 +7,7 @@ class Keyboard extends General {
     super();
     this.shiftMode = false;
     this.capsMode = false;
-    this.language = "ru";
+    this.language = localStorage.getItem("language") ?? "ru";
 
     this.htmlBlocks = {
       appWrapper: appWrapper
@@ -21,14 +21,11 @@ class Keyboard extends General {
     this.createTextareaBlock();
     this.createKeyboardBlock();
     this.createInfoBlock();
-
-    this.updateTextInLatterKeys();
-
-    this.createHandlerOnMouse();
-    this.createHandlerOnKey();
+    this.updateTextOnLetterKeys();
+    this.createHandlerOnKeys();
   }
 
-  //------CREATE METHODS-----------------------//
+  //------CREATE HTML STRUCTURE-----------------------//
   createAppWrapper() {
     let appWrapper = this.createDomElement("section", "", ["virtual-keyboard"]);
     document.body.prepend(appWrapper);
@@ -76,14 +73,14 @@ class Keyboard extends General {
     this.htmlBlocks.appWrapper.append(infoBlock);
   }
 
-  //------UPDATE METHODS-----------------------//
-  updateTextInLatterKeys() {
+  //------UPDATE KEYS TEXT-----------------------//
+  updateTextOnLetterKeys() {
     document.querySelectorAll(".key--latter").forEach((keyBlock) => {
-      this.updateKeyText(keyBlock);
+      this.updateTextOnKey(keyBlock);
     });
   }
 
-  updateKeyText(keyBlock) {
+  updateTextOnKey(keyBlock) {
     let keyText = ";";
     if (this.shiftMode) {
       keyText = keyBlock.dataset[`${this.language}Shift`];
@@ -96,151 +93,130 @@ class Keyboard extends General {
     return;
   }
 
-  //------HANDLER METHODS-----------------------//
-  createHandlerOnMouse() {
+  //------HANDLERS-----------------------//
+  createHandlerOnKeys() {
     document.querySelectorAll(".key").forEach((element) => {
       element.addEventListener("mousedown", (event) => {
-        this.clickKeyboardKey(event, event.currentTarget.dataset.keyCode);
+        this.handlerClickOnKey(event, event.currentTarget.dataset.keyCode);
       });
       element.addEventListener("mouseup", (event) =>
-        this.clickKeyboardKey(event, event.currentTarget.dataset.keyCode)
+        this.handlerClickOnKey(event, event.currentTarget.dataset.keyCode)
       );
     });
-  }
-
-  createHandlerOnKey() {
     document.body.addEventListener("keydown", (event) =>
-      this.clickKeyboardKey(event, event.code)
+      this.handlerClickOnKey(event, event.code)
     );
     document.body.addEventListener("keyup", (event) =>
-      this.clickKeyboardKey(event, event.code)
+      this.handlerClickOnKey(event, event.code)
     );
   }
 
-  clickKeyboardKey(event, keyCode) {
-    let keyData = document.querySelector(`[data-key-code="${keyCode}"]`);
-    if (!keyData) return false;
-
+  handlerClickOnKey(event, keyCode) {
     let currentKeyBlock = document.querySelector(
       `[data-key-code='${keyCode}']`
     );
-
-    if (event.type === "mousedown" || event.type === "keydown")
-      currentKeyBlock.classList.add("key--active");
-    if (event.type === "mouseup" || event.type === "keyup")
-      currentKeyBlock.classList.remove("key--active");
+    if (!currentKeyBlock) return;
 
     event.preventDefault();
 
-    if (
-      keyCode === "ShiftLeft" ||
-      keyCode === "ShiftRight" ||
-      keyCode === "CapsLock" ||
-      keyCode === "AltLeft" ||
-      keyCode === "AltRight" ||
-      keyCode === "ControlLeft" ||
-      keyCode === "ControlRight"
-    ) {
-      this.handlerSystemKey(event, keyCode);
-    } else if (event.type === "keydown" || event.type === "mousedown") {
-      if (keyCode === "Space") {
-        this.updateTextareaValue(" ");
-      } else if (keyCode === "Enter") {
-        this.updateTextareaValue("\n");
-      } else if (keyCode === "Tab") {
-        this.updateTextareaValue("    ", 4);
-      } else if (keyCode === "Backspace") {
-        this.deleteTextareaValue("Backspace");
-      } else if (keyCode === "Delete") {
-        this.deleteTextareaValue("Delete");
-      } else {
-        this.updateTextareaValue(currentKeyBlock.innerHTML);
+    this.toggleActiveClassOnKey(event, currentKeyBlock);
+
+    let handlerSystemKeys = this.getHandlerListOnSystemKeys();
+    if (event.type === "keyup" || event.type === "mouseup") {
+      if (keyCode === "ShiftLeft" || keyCode === "ShiftRight") {
+        this.handlerShiftClick(false);
       }
+    } else if (handlerSystemKeys.hasOwnProperty(keyCode)) {
+      handlerSystemKeys[keyCode](event, keyCode);
+    } else {
+      this.updateTextareaValue(currentKeyBlock.innerHTML);
     }
   }
 
-  updateTextareaValue(addedText = "", textSize = 1) {
-    let cursorStart = this.htmlBlocks.Textarea.selectionStart;
-    let cursorEnd = this.htmlBlocks.Textarea.selectionEnd;
-    let currentValue = this.htmlBlocks.Textarea.value;
-
-    let textBeforeCursor = currentValue.substring(0, cursorStart);
-    let textAfterCursor = currentValue.substring(
-      cursorEnd,
-      currentValue.length
-    );
-
-    this.htmlBlocks.Textarea.value =
-      textBeforeCursor + addedText + textAfterCursor;
-    this.htmlBlocks.Textarea.setSelectionRange(
-      cursorStart + textSize,
-      cursorStart + textSize
-    );
+  toggleActiveClassOnKey(event, keyBlock) {
+    if (event.type === "mousedown" || event.type === "keydown")
+      keyBlock.classList.add("key--active");
+    if (event.type === "mouseup" || event.type === "keyup")
+      keyBlock.classList.remove("key--active");
   }
 
-  deleteTextareaValue(deleteType) {
+  getHandlerListOnSystemKeys() {
+    return {
+      ShiftLeft: (event, keyCode) => this.handlerShiftClick(true),
+      ShiftRight: (event, keyCode) => this.handlerShiftClick(true),
+      CapsLock: (event, keyCode) => this.handelCapsLockClick(event),
+      AltLeft: (event, keyCode) =>
+        this.handelLanguageSwitchClick(event, keyCode),
+      AltRight: (event, keyCode) =>
+        this.handelLanguageSwitchClick(event, keyCode),
+      ControlLeft: (event, keyCode) => this.handelLanguageSwitchClick(event),
+      ControlRight: (event, keyCode) => this.handelLanguageSwitchClick(event),
+      Space: () => this.updateTextareaValue(" "),
+      Enter: () => this.updateTextareaValue("\n"),
+      Tab: () => this.updateTextareaValue("    ", 4),
+      Backspace: () => this.updateTextareaValue("", 0, "Backspace"),
+      Delete: () => this.updateTextareaValue("", 0, "Delete"),
+    };
+  }
+
+  handelCapsLockClick(event) {
+    this.capsMode = this.capsMode === true ? false : true;
+    if (this.capsMode === true) {
+      document.querySelector(".key--caps").classList.add("key--caps-active");
+    } else {
+      document.querySelector(".key--caps").classList.remove("key--caps-active");
+    }
+    this.updateTextOnLetterKeys();
+  }
+
+  handlerShiftClick(shiftMode) {
+    if (shiftMode === this.shiftMode) return false;
+    this.shiftMode = shiftMode;
+    this.updateTextOnLetterKeys();
+  }
+
+  handelLanguageSwitchClick(event, keyCode) {
+    if (
+      ((keyCode === "AltLeft" || keyCode === "AltRight") && event.ctrlKey) ||
+      ((keyCode === "ControlLeft" || keyCode === "ControlRight") &&
+        event.altKey)
+    ) {
+      this.language = this.language === "ru" ? "en" : "ru";
+      localStorage.setItem("language", this.language);
+      this.updateTextOnLetterKeys();
+    }
+  }
+
+  updateTextareaValue(addedText = "", cursorShift = 1, deleteMode = false) {
     let cursorStart = this.htmlBlocks.Textarea.selectionStart;
     let cursorEnd = this.htmlBlocks.Textarea.selectionEnd;
     let currentValue = this.htmlBlocks.Textarea.value;
 
-    let cursorShift = 0;
     let textBeforeCursor = currentValue.substring(0, cursorStart);
     let textAfterCursor = currentValue.substring(
       cursorEnd,
       currentValue.length
     );
 
-    if (cursorStart === cursorEnd) {
-      if (deleteType === "Backspace") {
+    if (deleteMode && cursorStart === cursorEnd) {
+      if (deleteMode === "Backspace") {
         if (textBeforeCursor) {
           cursorShift = -1;
           textBeforeCursor = textBeforeCursor.slice(0, -1);
         }
-      } else if (deleteType === "Delete") {
-        if (textAfterCursor) textBeforeCursor = textBeforeCursor.slice(0, -1);
+      } else {
+        if (textAfterCursor) {
+          textAfterCursor = textAfterCursor.slice(1);
+        }
       }
     }
 
-    this.htmlBlocks.Textarea.value = textBeforeCursor + textAfterCursor;
+    this.htmlBlocks.Textarea.value =
+      textBeforeCursor + addedText + textAfterCursor;
     this.htmlBlocks.Textarea.setSelectionRange(
       cursorStart + cursorShift,
       cursorStart + cursorShift
     );
-  }
-
-  setCapsMode(capsMode) {
-    if (capsMode === false) {
-      this.capsMode = true;
-      document.querySelector(".key--caps").classList.add("key--caps-active");
-    } else {
-      this.capsMode = false;
-      document.querySelector(".key--caps").classList.remove("key--caps-active");
-    }
-    this.updateTextInLatterKeys();
-  }
-
-  handlerSystemKey(event, keyCode) {
-    if (event.type === "mousedown" || event.type === "keydown") {
-      if (keyCode === "ShiftLeft" || keyCode === "ShiftRight") {
-        this.shiftMode = true;
-        this.updateTextInLatterKeys();
-      }else if (keyCode === "CapsLock") 
-        this.setCapsMode(this.capsMode === true ? false : true);
-      }else if (
-        ((keyCode === "AltLeft" || keyCode === "AltRight") && event.ctrlKey) ||
-        ((keyCode === "ControlLeft" || keyCode === "ControlRight") &&
-          event.altKey)
-      ) {
-        this.language = this.language === "ru" ? "en" : "ru";
-        this.updateTextInLatterKeys();
-      }
-    }
-    if (event.type === "mouseup" || event.type === "keyup") {
-      if (keyCode === "ShiftLeft" || keyCode === "ShiftRight") {
-        this.shiftMode = false;
-        this.updateTextInLatterKeys();
-      }
-    }
   }
 }
 
