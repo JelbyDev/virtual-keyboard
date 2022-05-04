@@ -1,55 +1,72 @@
-.keyboard {
-  background-color: $keyboard-fon;
+.virtual-keyboard {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  gap: 10px 0;
-  width: 932px;
-  margin: 0 auto;
-  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px 0;
 
-  &__row {
+  .keyboard {
+    background-color: $keyboard-fon;
+    width: $width-content;
     display: flex;
-    gap: 0 10px;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px 0;
+    border-radius: 10px;
+    box-shadow: 1px 1px 4px #602e2e;
+
+    &__row {
+      display: flex;
+      gap: 0 10px;
+    }
+
+    .key {
+      background-color: $key-fon;
+      color: $key-color;
+      box-shadow: $key-shadow;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.2s;
+      border-radius: 7px;
+      cursor: pointer;
+
+      &:hover,
+      &--active {
+        background-color: $key-hover-fon;
+        color: $key-hover-color;
+        box-shadow: none;
+      }
+      &--active {
+        border-radius: 14px;
+      }
+      &--caps-active {
+        color: green;
+      }
+      &--flex {
+        flex: 1;
+      }
+      &--space {
+        width: 350px;
+      }
+    }
   }
 
-  .key {
-    background-color: $key-fon;
-    color: $key-color;
-    box-shadow: $key-shadow;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .letter-field {
+    width: $width-content;
+    border: 2px solid $letter-field-border;
+    height: 300px;
+    resize: none;
+    border-radius: 10px;
+    padding: 15px;
     font-size: 18px;
-    transition: all 0.2s;
-    border-radius: 7px;
-    cursor: pointer;
-
-    &:hover,
-    &--active {
-      background-color: $key-hover-fon;
-      color: $key-hover-color;
-      box-shadow: none;
-    }
-    &--active {
-      border-radius: 14px;
-    }
-    &--caps-active {
-      color: green;
-    }
-    &--flex {
-      flex: 1;
-    }
-    &--space {
-      width: 350px;
-    }
   }
-}
 
-textarea {
-  width: 500px;
-  height: 300px;
-  margin: 0px auto;
+  .information {
+    text-align: center;
+    font-size: 18px;
+  }
 }

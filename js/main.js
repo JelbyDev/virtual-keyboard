@@ -140,44 +140,96 @@ class Keyboard extends General {
     } else if (event.type === "keydown" || event.type === "mousedown") {
       let textareaBlock = document.querySelector("textarea");
       let textareaValue = textareaBlock.value;
+      let cursorStart = textareaBlock.selectionStart;
+      let cursorEnd = textareaBlock.selectionEnd;
       if (keyCode === "Space") {
-        textareaValue += " ";
+        textareaValue = this.updateTextareaValue(textareaBlock, " ");
       } else if (keyCode === "Enter") {
-        textareaValue += "\n";
+        textareaValue = this.updateTextareaValue(textareaBlock, "\n");
       } else if (keyCode === "Tab") {
-        textareaValue += "    ";
+        textareaValue = this.updateTextareaValue(textareaBlock, "    ", 4);
       } else if (keyCode === "Backspace") {
-        let cursorStart = textareaBlock.selectionStart;
-        let cursorEnd = textareaBlock.selectionEnd;
-        let deleteStart = "";
-        let deleteEnd = "";
-        let cursorPositionAfterDelete = "";
         if (cursorStart === cursorEnd) {
-          if (cursorStart !== 0) {
-            deleteStart = cursorStart - 1;
-            deleteEnd = 1;
-            cursorPositionAfterDelete = cursorStart - 1;
-          }
+          textareaValue = this.deleteLetterInTextarea(
+            textareaBlock,
+            cursorStart - 1,
+            1,
+            cursorStart - 1
+          );
         } else {
-          deleteStart = cursorStart;
-          deleteEnd = cursorEnd;
-          cursorPositionAfterDelete = cursorStart;
-        }
-        if (deleteEnd) {
-          textareaValue = textareaValue.split("");
-          textareaValue.splice(deleteStart, deleteEnd);
-          textareaValue = textareaValue.join("");
-          setTimeout(function () {
-            textareaBlock.selectionStart = textareaBlock.selectionEnd =
-              cursorPositionAfterDelete;
-          }, 0);
+          textareaValue = this.deleteLetterInTextarea(
+            textareaBlock,
+            cursorStart,
+            cursorEnd,
+            cursorStart
+          );
         }
       } else if (keyCode === "Delete") {
+        if (cursorStart === cursorEnd) {
+          textareaValue = this.deleteLetterInTextarea(
+            textareaBlock,
+            cursorStart,
+            1,
+            cursorStart
+          );
+        } else {
+          textareaValue = this.deleteLetterInTextarea(
+            textareaBlock,
+            cursorStart,
+            cursorEnd,
+            cursorStart
+          );
+        }
       } else {
-        textareaValue += currentKeyBlock.innerHTML;
+        textareaValue = this.updateTextareaValue(
+          textareaBlock,
+          currentKeyBlock.innerHTML
+        );
       }
       textareaBlock.value = textareaValue;
     }
+  }
+
+  updateTextareaValue(textareaBlock, addedText = "", textSize = 0) {
+    let cursorStart = textareaBlock.selectionStart;
+    let cursorEnd = textareaBlock.selectionEnd;
+    let textareaValue = textareaBlock.value;
+
+    let textBeforeCursor = textareaValue.substring(0, cursorStart);
+    let textAfterCursor = textareaValue.substring(
+      cursorStart,
+      textareaValue.length
+    );
+
+    setTimeout(function () {
+      textareaBlock.selectionStart = textareaBlock.selectionEnd =
+        cursorStart + textSize + 1;
+    }, 0);
+
+    return textBeforeCursor + addedText + textAfterCursor;
+  }
+
+  deleteLetterInTextarea(
+    textareaBlock,
+    deleteStart,
+    deleteEnd,
+    cursorPositionAfterDelete,
+    toReplace = ""
+  ) {
+    let textareaValue = textareaBlock.value.split("");
+    if (
+      deleteStart < 0 ||
+      deleteStart > textareaValue.length ||
+      textareaValue.length === 0
+    )
+      return textareaValue;
+    textareaValue.splice(deleteStart, deleteEnd, toReplace);
+    textareaValue = textareaValue.join("");
+    setTimeout(function () {
+      textareaBlock.selectionStart = textareaBlock.selectionEnd =
+        cursorPositionAfterDelete;
+    }, 0);
+    return textareaValue;
   }
 
   handlerSystemKey(event, keyCode) {
@@ -227,7 +279,7 @@ class Keyboard extends General {
 
   //------CREATE METHODS-----------------------//
   createAppWrapper() {
-    let appWrapper = this.createDomElement("section", "", ["app"]);
+    let appWrapper = this.createDomElement("section", "", ["virtual-keyboard"]);
     document.body.prepend(appWrapper);
     return appWrapper;
   }
@@ -238,7 +290,7 @@ class Keyboard extends General {
   }
 
   createTextareaBlock() {
-    let textareaBlock = this.createDomElement("textarea");
+    let textareaBlock = this.createDomElement("textarea", "", ["letter-field"]);
     this.appWrapper.append(textareaBlock);
   }
 
@@ -252,13 +304,15 @@ class Keyboard extends General {
   }
 
   createInfoBlock() {
+    let infoBlock = this.createDomElement("div", "", ["information"]);
     let systemInfoBlock = this.createDomElement(
       "p",
       "Клава сделана под Windows"
     );
-    let languageInfoBlock = this.createDomElement("p", "Смена языка");
-    this.appWrapper.append(systemInfoBlock);
-    this.appWrapper.append(languageInfoBlock);
+    let languageInfoBlock = this.createDomElement("p", "Смена языка Ctr+Alt");
+    infoBlock.append(systemInfoBlock);
+    infoBlock.append(languageInfoBlock);
+    this.appWrapper.append(infoBlock);
   }
 
   //------GET METHODS-----------------------//

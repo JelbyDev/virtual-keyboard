@@ -9,8 +9,26 @@ html {
           box-sizing: border-box;
 }
 
-.keyboard {
+.virtual-keyboard {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 20px 0;
+}
+
+.virtual-keyboard .keyboard {
   background-color: #ffecef;
+  width: 932px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -20,19 +38,19 @@ html {
           flex-direction: column;
   padding: 20px;
   gap: 10px 0;
-  width: 932px;
-  margin: 0 auto;
   border-radius: 10px;
+  -webkit-box-shadow: 1px 1px 4px #602e2e;
+          box-shadow: 1px 1px 4px #602e2e;
 }
 
-.keyboard__row {
+.virtual-keyboard .keyboard__row {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   gap: 0 10px;
 }
 
-.keyboard .key {
+.virtual-keyboard .keyboard .key {
   background-color: #efabb6;
   color: #300505;
   -webkit-box-shadow: 1px 1px 3px #522828;
@@ -55,34 +73,43 @@ html {
   cursor: pointer;
 }
 
-.keyboard .key:hover, .keyboard .key--active {
+.virtual-keyboard .keyboard .key:hover, .virtual-keyboard .keyboard .key--active {
   background-color: #a5727a;
   color: #fff;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
 
-.keyboard .key--active {
+.virtual-keyboard .keyboard .key--active {
   border-radius: 14px;
 }
 
-.keyboard .key--caps-active {
+.virtual-keyboard .keyboard .key--caps-active {
   color: green;
 }
 
-.keyboard .key--flex {
+.virtual-keyboard .keyboard .key--flex {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
 }
 
-.keyboard .key--space {
+.virtual-keyboard .keyboard .key--space {
   width: 350px;
 }
 
-textarea {
-  width: 500px;
+.virtual-keyboard .letter-field {
+  width: 932px;
+  border: 2px solid #ff76a1;
   height: 300px;
-  margin: 0px auto;
+  resize: none;
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 18px;
+}
+
+.virtual-keyboard .information {
+  text-align: center;
+  font-size: 18px;
 }
 /*# sourceMappingURL=main.css.map */
