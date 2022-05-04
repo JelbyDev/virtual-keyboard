@@ -1,46 +1,6 @@
-import { KEYBOARD_KEYS, KEYBOARD_LAYOUT } from "./keyboardKeys.js";
-
-document.addEventListener("keydown", (event) => {});
-
-class General {
-  constructor() {}
-  createDomElement(tagName, innerText = null, classes = null) {
-    let element = document.createElement(tagName);
-    if (innerText) element.innerText = innerText;
-    if (classes) element.classList.add(...classes);
-    return element;
-  }
-}
-
-class Keys extends General {
-  constructor(keyCode) {
-    super();
-    this.keyCode = keyCode;
-    this.keyData = KEYBOARD_KEYS[keyCode];
-  }
-
-  getHtmlCode() {
-    let keyBlockClasses = ["key"];
-    if (this.keyData.letterKey) keyBlockClasses.push("key--latter");
-    if (this.keyData.additionalClasses)
-      keyBlockClasses = [...keyBlockClasses, ...this.keyData.additionalClasses];
-
-    let keyBlock = this.createDomElement("div", "", keyBlockClasses);
-
-    if (this.keyData.letterKey) {
-      keyBlock.dataset.ru = this.keyData["ru"]["text"];
-      keyBlock.dataset.ruShift = this.keyData["ru"]["shiftText"];
-      keyBlock.dataset.en = this.keyData["en"]["text"];
-      keyBlock.dataset.enShift = this.keyData["en"]["shiftText"];
-    } else if (this.keyData.systemKey) {
-      keyBlock.innerText = this.keyData.text;
-    }
-
-    keyBlock.dataset.keyCode = this.keyCode;
-
-    return keyBlock;
-  }
-}
+import { KEYBOARD_LAYOUT } from "./keyboardKeys.js";
+import { General } from "./General.js";
+import { Keys } from "./Keys.js";
 
 class Keyboard extends General {
   constructor(appWrapper = null) {
