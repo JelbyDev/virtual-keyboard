@@ -144,13 +144,13 @@ class Keyboard extends General {
     return {
       ShiftLeft: (event, keyCode) => this.handlerShiftClick(true),
       ShiftRight: (event, keyCode) => this.handlerShiftClick(true),
-      CapsLock: (event, keyCode) => this.handelCapsLockClick(event),
+      CapsLock: (event, keyCode) => this.handlerCapsLockClick(event),
       AltLeft: (event, keyCode) =>
-        this.handelLanguageSwitchClick(event, keyCode),
+        this.handlerLanguageSwitchClick(event, keyCode),
       AltRight: (event, keyCode) =>
-        this.handelLanguageSwitchClick(event, keyCode),
-      ControlLeft: (event, keyCode) => this.handelLanguageSwitchClick(event),
-      ControlRight: (event, keyCode) => this.handelLanguageSwitchClick(event),
+        this.handlerLanguageSwitchClick(event, keyCode),
+      ControlLeft: (event, keyCode) => this.handlerLanguageSwitchClick(event),
+      ControlRight: (event, keyCode) => this.handlerLanguageSwitchClick(event),
       Space: () => this.updateTextareaValue(" "),
       Enter: () => this.updateTextareaValue("\n"),
       Tab: () => this.updateTextareaValue("    ", 4),
@@ -159,7 +159,7 @@ class Keyboard extends General {
     };
   }
 
-  handelCapsLockClick(event) {
+  handlerCapsLockClick(event) {
     this.capsMode = this.capsMode === true ? false : true;
     if (this.capsMode === true) {
       document.querySelector(".key--caps").classList.add("key--caps-active");
@@ -175,7 +175,7 @@ class Keyboard extends General {
     this.updateTextOnLetterKeys();
   }
 
-  handelLanguageSwitchClick(event, keyCode) {
+  handlerLanguageSwitchClick(event, keyCode) {
     if (
       ((keyCode === "AltLeft" || keyCode === "AltRight") && event.ctrlKey) ||
       ((keyCode === "ControlLeft" || keyCode === "ControlRight") &&
