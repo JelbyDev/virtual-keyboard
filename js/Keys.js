@@ -1,32 +1,67 @@
-import { KEYBOARD_KEYS } from "./keyboardKeys.js";
-import { General } from "./General.js";
+import { KEYBOARD_KEYS } from "./keyboardData.js";
+import createDomElement from "./General.js";
 
-export class Keys extends General {
+class Keys {
   constructor(keyCode) {
-    super();
-    this.keyCode = keyCode;
-    this.keyData = KEYBOARD_KEYS[keyCode];
+    this.code = keyCode;
+    this.createKeyData();
+    this.createHtmlElement();
   }
 
-  getHtmlCode() {
-    let keyBlockClasses = ["key"];
-    if (this.keyData.letterKey) keyBlockClasses.push("key--latter");
-    if (this.keyData.additionalClasses)
-      keyBlockClasses = [...keyBlockClasses, ...this.keyData.additionalClasses];
+  createKeyData() {
+    const keyType = KEYBOARD_KEYS[this.code].pop();
+    if (keyType === "system") this.getSystemKey(...KEYBOARD_KEYS[this.code]);
+    if (keyType === "letter") this.getLetterKey(...KEYBOARD_KEYS[this.code]);
+  }
 
-    let keyBlock = this.createDomElement("div", "", keyBlockClasses);
+  getSystemKey(text, additionalClasses) {
+    this.data = {
+      text,
+      additionalClasses,
+      systemKey: true,
+    };
+  }
 
-    if (this.keyData.letterKey) {
-      keyBlock.dataset.ru = this.keyData["ru"]["text"];
-      keyBlock.dataset.ruShift = this.keyData["ru"]["shiftText"];
-      keyBlock.dataset.en = this.keyData["en"]["text"];
-      keyBlock.dataset.enShift = this.keyData["en"]["shiftText"];
-    } else if (this.keyData.systemKey) {
-      keyBlock.innerText = this.keyData.text;
+  getLetterKey(ruText, ruShiftText, enText, enShiftText) {
+    this.data = {
+      ru: { text: ruText, shiftText: ruShiftText },
+      en: { text: enText, shiftText: enShiftText },
+      letterKey: true,
+    };
+  }
+
+  createHtmlElement() {
+    let keyHtmlClasses = ["key"];
+    if (this.data.letterKey) keyHtmlClasses.push("key--latter");
+    if (this.data.additionalClasses) {
+      keyHtmlClasses = [...keyHtmlClasses, ...this.data.additionalClasses];
     }
 
-    keyBlock.dataset.keyCode = this.keyCode;
+    this.keyHtml = createDomElement("div", "", keyHtmlClasses);
 
-    return keyBlock;
+    if (this.data.letterKey) {
+      this.keyHtml.dataset.ru = this.data.ru.text;
+      this.keyHtml.dataset.ruShift = this.data.ru.shiftText;
+      this.keyHtml.dataset.en = this.data.en.text;
+      this.keyHtml.dataset.enShift = this.data.en.shiftText;
+    } else if (this.data.systemKey) {
+      this.keyHtml.innerText = this.data.text;
+    }
+
+    this.keyHtml.dataset.keyCode = this.code;
+  }
+
+  isLetter() {
+    return this.data?.letterKey;
+  }
+
+  get htmlElement() {
+    return this.keyHtml;
+  }
+
+  get keyCode() {
+    return this.code;
   }
 }
+
+export default Keys;
