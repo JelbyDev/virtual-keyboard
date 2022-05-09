@@ -464,7 +464,8 @@ textarea {
 
 body {
   font-family: OpenSans, Arial, sans-serif;
-  background: url("../../../images/cats.jpg") no-repeat;
+  min-width: 982px;
+  background: url("../../images/cats.jpg") no-repeat;
   background-size: cover;
   display: -webkit-box;
   display: -ms-flexbox;
