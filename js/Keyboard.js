@@ -103,6 +103,7 @@ class Keyboard {
     this.activeKey = (keyCode in this.keys) ? this.keys[keyCode] : false;
     if (!this.activeKey) return false;
     event.preventDefault();
+
     this.toggleActiveClassOnKey(event);
 
     const handlerSystemKeys = this.getHandlerListOnSystemKeys();
@@ -123,11 +124,17 @@ class Keyboard {
 
   toggleActiveClassOnKey(event) {
     if (event.type === "mousedown" || event.type === "keydown") {
+      const clickOnShiftKeysTogether = (
+        this.shiftMode === true
+        && event.shiftKey
+        && (this.activeKey.keyCode === "ShiftLeft" || this.activeKey.keyCode === "ShiftRight")
+      );
+      if (clickOnShiftKeysTogether) return false;
       this.activeKey.htmlElement.classList.add("key--active");
     }
-    if (event.type === "mouseup" || event.type === "keyup") {
-      this.activeKey.htmlElement.classList.remove("key--active");
-    }
+    if (event.type === "mouseup" || event.type === "keyup") this.activeKey.htmlElement.classList.remove("key--active");
+
+    return true;
   }
 
   getHandlerListOnSystemKeys() {
