@@ -1,6 +1,12 @@
-html,
 body {
   font-family: $font-regular;
+  background: url("../../../images/cats.jpg") no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
 }
 
 .virtual-keyboard {
@@ -9,16 +15,25 @@ body {
   justify-content: center;
   align-items: center;
   gap: 20px 0;
+  padding: 20px 50px;
+  background-color: rgba($color: #000, $alpha: 0.7);
+  border-radius: 15px;
+  color: #fff;
+
+  h1 {
+    font-size: 28px;
+    font-weight: bold;
+  }
 
   .keyboard {
     background-color: $keyboard-fon;
     width: $width-content;
+    box-shadow: $key-shadow;
     display: flex;
     flex-direction: column;
     padding: 20px;
     gap: 10px 0;
     border-radius: 10px;
-    box-shadow: $key-shadow;
 
     &__row {
       display: flex;
@@ -29,6 +44,8 @@ body {
       background-color: $key-fon;
       color: $key-color;
       box-shadow: $key-shadow;
+      font-family: $font-bold;
+      font-weight: bold;
       width: 50px;
       height: 50px;
       display: flex;
@@ -40,34 +57,14 @@ body {
       cursor: pointer;
 
       &:hover,
-      &--active {
+      &--active,
+      &--caps-active {
         background-color: $key-hover-fon;
         color: $key-hover-color;
         box-shadow: none;
       }
       &--active {
         border-radius: 14px;
-      }
-      &--caps-active {
-        position: relative;
-
-        &:before,
-        &:after {
-          content: "";
-          height: 100%;
-          width: 10px;
-          background: $key-color;
-          top: 0;
-          position: absolute;
-        }
-        &:before {
-          left: 0;
-          border-radius: 7px 0px 0px 7px;
-        }
-        &:after {
-          right: 0;
-          border-radius: 0px 7px 7px 0px;
-        }
       }
       &--flex {
         flex: 1;
@@ -90,6 +87,10 @@ body {
 
   .information {
     text-align: center;
-    font-size: 18px;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px 0;
+    font-weight: bold;
   }
 }

@@ -29,7 +29,7 @@ class Keyboard {
   }
 
   createTitleBlok() {
-    const titleBlock = createDomElement("h1", "Virtual keyboard");
+    const titleBlock = createDomElement("h1", "VIRTUAL KEYBOARD");
     this.htmlBlocks.appWrapper.append(titleBlock);
   }
 
