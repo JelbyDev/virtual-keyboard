@@ -1,5 +1,5 @@
 import { KEYBOARD_KEYS } from "./keyboardData.js";
-import createDomElement from "./General.js";
+import createDomElement from "./generalFunctions.js";
 
 class Keys {
   constructor(keyCode) {
@@ -12,22 +12,6 @@ class Keys {
     const keyType = KEYBOARD_KEYS[this.code].pop();
     if (keyType === "system") this.getSystemKey(...KEYBOARD_KEYS[this.code]);
     if (keyType === "letter") this.getLetterKey(...KEYBOARD_KEYS[this.code]);
-  }
-
-  getSystemKey(text, additionalClasses) {
-    this.data = {
-      text,
-      additionalClasses,
-      systemKey: true,
-    };
-  }
-
-  getLetterKey(ruText, ruShiftText, enText, enShiftText) {
-    this.data = {
-      ru: { text: ruText, shiftText: ruShiftText },
-      en: { text: enText, shiftText: enShiftText },
-      letterKey: true,
-    };
   }
 
   createHtmlElement() {
@@ -61,6 +45,22 @@ class Keys {
 
   get keyCode() {
     return this.code;
+  }
+
+  getSystemKey(text, additionalClasses) {
+    this.data = {
+      text,
+      additionalClasses,
+      systemKey: true,
+    };
+  }
+
+  getLetterKey(ruText, ruShiftText, enText, enShiftText) {
+    this.data = {
+      ru: { text: ruText, shiftText: ruShiftText },
+      en: { text: enText, shiftText: enShiftText },
+      letterKey: true,
+    };
   }
 }
 
