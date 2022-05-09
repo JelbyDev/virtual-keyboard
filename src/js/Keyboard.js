@@ -1,5 +1,5 @@
 import { KEYBOARD_LAYOUT } from "./keyboardData.js";
-import createDomElement from "./generalFunctions.js";
+import { createDomElement, decodeHtmlSpecialChars } from "./generalFunctions.js";
 import Keys from "./Keys.js";
 
 class Keyboard {
@@ -85,7 +85,7 @@ class Keyboard {
       keyText = keyBlock.dataset[`${this.language}`];
       if (this.capsMode) keyText = keyText.toUpperCase();
     }
-    keyBlock.innerText = keyText;
+    keyBlock.textContent = keyText;
     return true;
   }
 
@@ -193,6 +193,8 @@ class Keyboard {
     const currentValue = this.htmlBlocks.Textarea.value;
     let currentCursorShift = cursorShift;
 
+    const decodingAddedText = decodeHtmlSpecialChars(addedText);
+
     let textBeforeCursor = currentValue.substring(0, cursorStart);
     let textAfterCursor = currentValue.substring(
       cursorEnd,
@@ -211,7 +213,7 @@ class Keyboard {
     }
 
     this.htmlBlocks.Textarea.focus();
-    this.htmlBlocks.Textarea.value = textBeforeCursor + addedText + textAfterCursor;
+    this.htmlBlocks.Textarea.value = textBeforeCursor + decodingAddedText + textAfterCursor;
     this.htmlBlocks.Textarea.setSelectionRange(
       cursorStart + currentCursorShift,
       cursorStart + currentCursorShift,

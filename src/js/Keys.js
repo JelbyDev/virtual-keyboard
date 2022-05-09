@@ -1,5 +1,5 @@
 import { KEYBOARD_KEYS } from "./keyboardData.js";
-import createDomElement from "./generalFunctions.js";
+import { createDomElement } from "./generalFunctions.js";
 
 class Keys {
   constructor(keyCode) {
