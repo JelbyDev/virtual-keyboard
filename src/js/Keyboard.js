@@ -146,9 +146,9 @@ class Keyboard {
       AltRight: (event) => this.handlerLanguageSwitchClick(event),
       ControlLeft: (event) => this.handlerLanguageSwitchClick(event),
       ControlRight: (event) => this.handlerLanguageSwitchClick(event),
-      Space: () => this.updateTextareaValue(" "),
+      Space: () => this.updateTextareaValue("&nbsp;"),
       Enter: () => this.updateTextareaValue("\n"),
-      Tab: () => this.updateTextareaValue("    ", 4),
+      Tab: () => this.updateTextareaValue("&nbsp;&nbsp;&nbsp;&nbsp;", 4),
       Backspace: () => this.updateTextareaValue("", 0, "Backspace"),
       Delete: () => this.updateTextareaValue("", 0, "Delete"),
     };
