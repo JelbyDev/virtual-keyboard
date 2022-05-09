@@ -62,7 +62,7 @@ class Keyboard {
   createInfoBlock() {
     const infoBlock = createDomElement("div", "", ["information"]);
     const systemInfoBlock = createDomElement("p", "Keyboard for OC Window");
-    const languageInfoBlock = createDomElement("p", "Language change: Ctr + Alt");
+    const languageInfoBlock = createDomElement("p", "Language change: Left Ctr + Alt");
     infoBlock.append(systemInfoBlock);
     infoBlock.append(languageInfoBlock);
     this.htmlBlocks.appWrapper.append(infoBlock);
