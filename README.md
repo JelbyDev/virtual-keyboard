@@ -1,4 +1,4 @@
-# Deploy - [https://jelbydev.github.io/virtual-keyboard/](Virtual keyboard)
+[https://jelbydev.github.io/virtual-keyboard/](Virtual keyboard)
 
 # Tasks:
 
