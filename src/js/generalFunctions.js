@@ -6,7 +6,8 @@ export const createDomElement = (tagName, innerText = null, classes = null) => {
 };
 
 export const decodeHtmlSpecialChars = (string) => {
-  if (!string) return string;
+  const ignoreChars = ["\n", " ", "    "];
+  if (!string || ignoreChars.includes(string)) return string;
   const parser = new DOMParser();
   const parserFromString = parser.parseFromString(string, "text/html");
   return parserFromString.body.textContent;
