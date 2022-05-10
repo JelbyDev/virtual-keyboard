@@ -1,0 +1,11 @@
+body {
+  font-family: $font-regular;
+  min-width: $min-width-body;
+  background: url("../../images/cats.jpg") no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+}

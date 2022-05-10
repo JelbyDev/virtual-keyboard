@@ -1,0 +1,85 @@
+.virtual-keyboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px 0;
+  padding: 20px 50px;
+  background-color: rgba($color: #000, $alpha: 0.7);
+  border-radius: 15px;
+  color: #fff;
+
+  h1 {
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .keyboard {
+    background-color: $keyboard-fon;
+    width: $width-content;
+    box-shadow: $key-shadow;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px 0;
+    border-radius: 10px;
+
+    &__row {
+      display: flex;
+      gap: 0 10px;
+    }
+
+    .key {
+      background-color: $key-fon;
+      color: $key-color;
+      box-shadow: $key-shadow;
+      font-family: $font-bold;
+      font-weight: bold;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.2s;
+      border-radius: 7px;
+      cursor: pointer;
+
+      &:hover,
+      &--active,
+      &--caps-active {
+        background-color: $key-hover-fon;
+        color: $key-hover-color;
+        box-shadow: none;
+      }
+      &--active {
+        border-radius: 14px;
+      }
+      &--flex {
+        flex: 1;
+      }
+      &--space {
+        width: 350px;
+      }
+    }
+  }
+
+  .letter-field {
+    width: $width-content;
+    border: 2px solid $letter-field-border;
+    height: 300px;
+    resize: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 18px;
+  }
+
+  .information {
+    text-align: center;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px 0;
+    font-weight: bold;
+  }
+}
